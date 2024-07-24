@@ -1,0 +1,56 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: User-Service
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/microservices
+    username: root
+    password:
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.cj.dialect.MySQLDialect
+
+# This is config Code Comes from Github
+
+  config:
+    import: configserver:http://localhost:8084
+#TODO This Code Comes Through Config Server
+#eureka:
+#  instance:
+#    prefer-ip-address: true
+#  client:
+#    fetch-registry: true
+#    register-with-eureka: true
+#    service-url:
+#      defaultZone: http://localhost:8761/eureka
+
+# TODO Configuration for Resilience4J
+resilience4j.circuitbreaker:
+  instances:
+    ratingHotelBreaker:
+      registerHealthIndicator: true
+      slidingWindowSize: 10
+      minimumNumberOfCalls: 5
+      failureRateThreshold: 50
+      waitDurationInOpenState: 10000
+      permittedNumberOfCallsInHalfOpenState: 3
+
+#TODO Configuration for Actuator & AOP
+management:
+  health:
+    circuitbreakers:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: always
