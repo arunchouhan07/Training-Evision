@@ -1,0 +1,154 @@
+version: '3'
+services:
+  order-service:
+    image: order-service:0.0.5-SNAPSHOT
+    environment:
+      OTEL_SERVICE_NAME: "order-service"
+      OTEL_RESOURCE_ATTRIBUTES: "service=order-service,env=dev"
+      OTEL_EXPORTER_OTLP_ENDPOINT: "http://collector:4317"
+      # Logs are disabled by default
+      OTEL_LOGS_EXPORTER: "otlp"
+    ports:
+      - "8080:8080"
+    depends_on:
+      - collector
+
+  collector:
+    container_name: collector
+    image: otel/opentelemetry-collector-contrib:0.91.0
+    command:
+      - --config=/etc/otelcol-contrib/otel-collector.yml
+    volumes:
+      - ./docker/collector/otel-collector.yml:/etc/otelcol-contrib/otel-collector.yml
+    restart: always
+    ports:
+      - "4317" # OTLP gRPC receiver
+
+#version: '3'
+#services:
+#  order-service:
+#    image: order-service:0.0.5-SNAPSHOT
+#    environment:
+#      OTEL_SERVICE_NAME: "order-service"
+#      OTEL_RESOURCE_ATTRIBUTES: "service=order-service,env=dev"
+#      # Update endpoint URL to point to your local ElasticSearch instance
+#      OTEL_EXPORTER_OTLP_ENDPOINT: "http://localhost:9200"  # Replace if port is different
+#      # Logs are disabled by default
+#      OTEL_LOGS_EXPORTER: "otlp"
+#    ports:
+#      - "8080:8080"
+#
+#  collector:
+#    # Use existing otel image (already pulled)
+#    image: otel/opentelemetry-collector-contrib:0.91.0
+#    command:
+#      - --config=/etc/otelcol-contrib/otel-collector.yml
+#    volumes:
+#      - ./docker/collector/otel-collector-elasticsearch.yml:/etc/otelcol-contrib/otel-collector.yml
+#    restart: always
+#    ports:
+#      - "4317"
+
+#  elasticsearch:
+#    container_name: elasticsearch
+#    image: elasticsearch:latest
+#    environment:
+#    # Configure ElasticSearch settings (optional)
+#    # Refer to documentation for details (see link below)
+#    # https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html
+#    restart: always
+#    ports:
+#      - "9200:9200"  # ElasticSearch REST API
+#
+##
+#- We've removed unnecessary services like `tempo`, `loki`, `prometheus`, `grafana`, `jaeger-all-in-one`, and `zipkin-all-in-one` as they were not directly related to sending data to ElasticSearch.
+#- The `postgres` service can also be removed if your application doesn't require a database connection.
+#- The `order-service` configuration remains the same, with environment variables for OpenTelemetry.
+#- The `collector` configuration uses the same volume mount for your custom configuration (`otel-collector-elasticsearch.yml`) defining the ElasticSearch exporter.
+#- The `elasticsearch` service remains to handle data storage and querying. You can optionally configure additional settings for ElasticSearch in this section.
+#
+#  **Remember:**
+#
+#- Create the `otel-collector-elasticsearch.yml` file as explained previously with the ElasticSearch exporter configuration.
+#- Ensure your ElasticSearch instance is up and running before starting the collector.
+#- Build your Docker images (if needed) and run `docker-compose up -d` to start all services.
+#
+#  This revised configuration provides a minimal setup for your Spring Boot application with OpenTelemetry sending data to ElasticSearch for centralized logging and analysis. You can further customize it based on your specific requirements.
+#
+
+#  tempo:
+#    container_name: tempo
+#    image: grafana/tempo:latest
+#    command: [ "-config.file=/etc/tempo.yml" ]
+#    volumes:
+#      - ./docker/tempo/tempo.yml:/etc/tempo.yml
+#    restart: always
+#    ports:
+#      - "4317"  # otlp grpc
+#      - "3200"  # tempo as grafana datasource
+#
+#  loki:
+#    container_name: loki
+#    image: grafana/loki:latest
+#    command: -config.file=/etc/loki/local-config.yaml
+#    restart: always
+#    ports:
+#      - "3100"
+#
+#  prometheus:
+#    container_name: prometheus
+#    image: prom/prometheus
+#    volumes:
+#      - ./docker/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+#    command:
+#      - --config.file=/etc/prometheus/prometheus.yml
+#      - --enable-feature=exemplar-storage
+#      - --web.enable-remote-write-receiver
+#    restart: always
+#    ports:
+#      - '9090:9090'
+#    depends_on:
+#      - collector
+#
+#  grafana:
+#    container_name: grafana
+#    image: grafana/grafana
+#    volumes:
+#      - ./docker/grafana/grafana-datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml
+#    restart: always
+#    ports:
+#      - "3000:3000"
+#    depends_on:
+#      - prometheus
+#      - loki
+#      - jaeger-all-in-one
+#      - zipkin-all-in-one
+#      - tempo
+#
+#  jaeger-all-in-one:
+#    container_name: jaeger
+#    image: jaegertracing/all-in-one:latest
+#    environment:
+#      - COLLECTOR_OTLP_ENABLED=true
+#    restart: always
+#    ports:
+#      - "16686:16686"
+#      - "4317"
+
+#  zipkin-all-in-one:
+#    container_name: zipkin
+#    image: openzipkin/zipkin:latest
+#    restart: always
+#    ports:
+#      - "9411:9411"
+
+#  postgres:
+#    container_name: postgres
+#    image: postgres:latest
+#    restart: always
+#    environment:
+#      POSTGRES_DB: opentelemetry
+#      POSTGRES_USER: username
+#      POSTGRES_PASSWORD: password
+#    ports:
+#      - "5432:5432"
