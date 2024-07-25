@@ -16,7 +16,7 @@ public interface CategoryRepository extends JpaRepository<Category,Integer> {
     @Query("select c from Category c")
     public List<Category> findAllCategory();
 
-    @Query(value = "SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END FROM Category WHERE Category.name=:name", nativeQuery = true)
+    @Query(value= "SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END FROM Category WHERE Category.name=:name", nativeQuery = true)
     public Integer countByCategoryName(@Param("name") String name);
 
     @Transactional
