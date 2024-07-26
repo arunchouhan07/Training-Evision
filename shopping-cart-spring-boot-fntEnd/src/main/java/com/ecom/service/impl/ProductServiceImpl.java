@@ -1,7 +1,9 @@
 package com.ecom.service.impl;
 
 import com.ecom.model.Product;
+import com.ecom.repository.ProductRepository;
 import com.ecom.service.ProductService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -9,14 +11,18 @@ import java.util.List;
 
 @Service
 public class ProductServiceImpl implements ProductService {
+
+    @Autowired
+    private ProductRepository productRepository;
+
     @Override
     public Product saveProduct(Product product) {
-        return null;
+        return productRepository.save(product);
     }
 
     @Override
     public List<Product> getAllProducts() {
-        return List.of();
+        return productRepository.findAll();
     }
 
     @Override

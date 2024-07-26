@@ -38,10 +38,12 @@ public class CategoryController {
         if(existCategory)
         {
             session.setAttribute("errorMessage", "Category Name Already Exists");
+            return "/error.html";
         }else{
             int saveCategory = categoryService.saveCategory(category);
-            if(saveCategory>1){
+            if(saveCategory!=1){
                 session.setAttribute("errorMessage","Not Saved ! internal Server Error");
+                return "/error.html";
             }else {
                 File saveFile = new ClassPathResource("static/img").getFile();
 
@@ -55,7 +57,7 @@ public class CategoryController {
                 session.setAttribute("Success","Saved successfully");
             }
         }
-        return "redirect:/admin/category";
+        return "admin/successCategory";
     }
 
     @GetMapping("/category")
@@ -82,7 +84,7 @@ public class CategoryController {
 
         if(!ObjectUtils.isEmpty(c)){
             c.setName(category.getName());
-            c.setActive(category.isActive());
+            c.setIsActive(category.getIsActive());
             c.setImageName(fileName);
         }
         int updateCategory=categoryService.updateCategory(c);

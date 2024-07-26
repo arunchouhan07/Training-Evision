@@ -17,11 +17,11 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public int saveCategory(Category category) {
-        return categoryRepository.save(category.getId(),category.getName(),category.getImageName(),category.isActive());
+        return categoryRepository.save(category.getId(),category.getName(),category.getImageName(),category.getIsActive());
     }
     @Override
     public int updateCategory(Category category) {
-        return categoryRepository.updateCategory(category.getId(),category.getName(),category.getImageName(),category.isActive());
+        return categoryRepository.updateCategory(category.getId(),category.getName(),category.getImageName(),category.getIsActive());
     }
 
     @Override
