@@ -38,4 +38,3 @@ public class Product {
 	private Boolean isActive;
 	
 }
-//Test
