@@ -23,6 +23,7 @@ public class BasicSecurityConfiguration {
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        //Cross Site Request Forgery
         http.csrf(AbstractHttpConfigurer::disable).authorizeHttpRequests((authorize) -> {
             authorize.requestMatchers("/api/suppliers/create").hasRole("ADMIN");
             authorize.anyRequest().authenticated();
