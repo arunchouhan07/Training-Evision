@@ -29,33 +29,33 @@
 							<form action="/admin/saveProduct" method="post"
 								enctype="multipart/form-data">
 								<div class="mb-3">
-									<label>Enter Title</label> <input type="text" name="title"
+									<label>Enter Title</label> <input type="text" name="title" required
 										class="form-control">
 								</div>
 
 								<div class="mb-3">
 									<label>Enter Description</label>
-									<textarea rows="3" cols="" class="form-control"
+									<textarea rows="3" cols="" class="form-control" required
 										name="description"></textarea>
 								</div>
 
 								<div class="mb-3">
 									<label>Category</label> <select class="form-control"
-										name="category">
+										name="category" required>
 										<option>--select--</option>
 										<option th:each="c:${categories}">[[${c.name}]]</option>
 									</select>
 								</div>
 
 								<div class="mb-3">
-									<label>Enter Price</label> <input type="number" name="price"
+									<label>Enter Price</label> <input type="number" name="price" required
 										class="form-control">
 								</div>
 								<div class="mb-3">
 									<label>Status</label>
 
 									<div class="form-check">
-										<input class="form-check-input" type="radio"
+										<input class="form-check-input" type="radio" checked
 											value="true" name="isActive" id="flexRadioDefault1">
 										<label class="form-check-label" for="flexRadioDefault1">
 											Active </label>
@@ -72,12 +72,12 @@
 								<div class="row">
 
 									<div class="mb-3 col">
-										<label>Enter Stock</label> <input type="text" name="stock"
+										<label>Enter Stock</label> <input type="number" name="stock" required
 											class="form-control">
 									</div>
 
 									<div class="mb-3 col">
-										<label>Upload Image</label> <input type="file" name="file"
+										<label>Upload Image</label> <input type="file" name="file" required
 											class="form-control">
 									</div>
 								</div>

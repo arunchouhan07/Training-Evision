@@ -30,6 +30,11 @@ public class CategoryController {
         return "admin/index";
     }
 
+    @GetMapping("/index")
+    public String getIndex() {
+        return "admin/index";
+    }
+
     @PostMapping("/saveCategory")
     public String saveCategory(@ModelAttribute Category category, @RequestParam("file") MultipartFile file, HttpSession session) throws IOException {
         String imageName=(!file.isEmpty())? file.getOriginalFilename() : "default.jpg";
@@ -38,12 +43,12 @@ public class CategoryController {
         if(existCategory)
         {
             session.setAttribute("errorMessage", "Category Name Already Exists");
-            return "/error.html";
+            return "/admin/errorCategory.html";
         }else{
             int saveCategory = categoryService.saveCategory(category);
             if(saveCategory!=1){
                 session.setAttribute("errorMessage","Not Saved ! internal Server Error");
-                return "/error.html";
+                  return "/admin/errorCategory.html";
             }else {
                 File saveFile = new ClassPathResource("static/img").getFile();
 
@@ -82,11 +87,10 @@ public class CategoryController {
         Category c = categoryService.getCategoryById(category.getId());
         String fileName=(!multipartFile.isEmpty())? multipartFile.getOriginalFilename():c.getImageName();
 
-        if(!ObjectUtils.isEmpty(c)){
             c.setName(category.getName());
             c.setIsActive(category.getIsActive());
             c.setImageName(fileName);
-        }
+
         int updateCategory=categoryService.updateCategory(c);
         File saveFile = new ClassPathResource("static/img").getFile();
 

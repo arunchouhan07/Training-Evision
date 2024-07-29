@@ -42,10 +42,10 @@ public class ProductController {
     }
 
     @GetMapping("/loadAddProduct")
-    public String loadAddProduct(Model m, HttpSession session) {
+    public String loadAddProduct(Model m) {
         List<Category> categories = categoryService.getAllCategory();
         m.addAttribute("categories", categories);
-        return "admin/add_Product";
+        return "redirect:/admin/add_Product";
     }
 
     @PostMapping("/saveProduct")
@@ -73,6 +73,41 @@ public class ProductController {
         }
 
         return "/admin/success";
-
     }
+
+    @GetMapping("/editProduct/{id}")
+    public String editProduct(@PathVariable int id, Model m) {
+        Product product = productService.getProductById(id);
+        m.addAttribute("product", product);
+        return "admin/edit_Product";
+    }
+
+    @PostMapping("/updateProduct")
+    public String updateProduct(@ModelAttribute Product product,@RequestParam("file")MultipartFile multipartFile, HttpSession session) {
+        if (product.getDiscount() < 0 || product.getDiscount() > 100) {
+            session.setAttribute("errorMsg", "invalid Discount");
+        }else{
+            Product updateProduct = productService.updateProduct(product, multipartFile);
+            if (!ObjectUtils.isEmpty(updateProduct)) {
+                session.setAttribute("succMsg", "Product update success");
+            } else {
+                session.setAttribute("errorMsg", "Something wrong on server");
+                return "redirect:/admin/errorr";
+            }
+        }
+        return "admin/success";
+       // return "redirect:/admin/editProduct/" + product.getId();
+    }
+
+    @GetMapping("/deleteProduct/{id}")
+    public String deleteProduct(@PathVariable int id, HttpSession session) {
+        Boolean deleteProduct = productService.deleteProduct(id);
+        if(deleteProduct){
+            session.setAttribute("succcMsg", "Product Deleted Success");
+        }else{
+            session.setAttribute("errorMsg", "Something wrong on server");
+        }
+        return "/admin/products";
+    }
+
 }

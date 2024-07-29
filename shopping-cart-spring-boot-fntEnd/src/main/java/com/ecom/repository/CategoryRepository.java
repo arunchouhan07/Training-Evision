@@ -28,4 +28,6 @@ public interface CategoryRepository extends JpaRepository<Category,Integer> {
     @Modifying
     @Query(value = "update Category c set c.name=:name, c.image_name=:imageName, c.is_active=:isActive where c.id=:id",nativeQuery = true)
     public int updateCategory(@Param("id") int id,@Param("name") String name,@Param("imageName") String imageName,@Param("isActive") boolean isActive );
+
+    public List<Category> findByIsActiveTrue();
 }
