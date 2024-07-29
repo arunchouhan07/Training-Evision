@@ -34,13 +34,13 @@
 							<div class="list-group">
 								<p class="fs-5">Category</p>
 								<a href="/products"
-									th:classappend="${paramValue==''} ? 'active':''"
-									class="list-group-item list-group-item-action"
-									aria-current="true"> All </a>
-								<a th:each="c:${categories}"
-									th:href="@{'/products?category='+${c.name}}"
-									th:classappend="${paramValue == c.name} ? 'active':''"
-									class="list-group-item list-group-item-action">[[${c.name}]]</a>
+								   th:classappend="${paramValue == '' ? 'active' : ''}"
+								   class="list-group-item-action list-group-item "
+								   aria-current="true"> All </a>
+								<a th:each="c : ${categories}"
+								   th:href="@{'/products?category=' + ${c.name}}"
+								   th:classappend="${paramValue == c.name ? ' active' : ''}"
+								   class="list-group-item list-group-item-action">[[${c.name}]]</a>
 							</div>
 						</div>
 					</div>

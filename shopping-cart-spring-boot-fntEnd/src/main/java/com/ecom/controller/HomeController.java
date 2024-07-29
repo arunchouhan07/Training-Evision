@@ -9,6 +9,7 @@ import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
@@ -43,6 +44,15 @@ public class HomeController {
         List<Category> allActiveCategory = categoryService.getAllActiveCategory();
         model.addAttribute("products", allProducts);
         model.addAttribute("categories", allActiveCategory);
+        model.addAttribute("paramValue",category);
         return "/product.html";
     }
+
+    @GetMapping("/product/{id}")
+    public String product(Model model, @PathVariable int id) {
+        Product productById = productService.getProductById(id);
+        model.addAttribute("product", productById);
+        return "view_product";
+    }
+
 }
