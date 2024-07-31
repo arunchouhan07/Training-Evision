@@ -41,11 +41,11 @@ public class UserDtls {
 //
 //	private Boolean isEnable;
 //
-//	private Boolean accountNonLocked;
-//
-//	private Integer failedAttempt;
-//
-//	private Date lockTime;
+	private Boolean accountNonLocked;
+
+	private Integer failedAttempt;
+
+	private Date lockTime;
 //
 //	private String resetToken;
 

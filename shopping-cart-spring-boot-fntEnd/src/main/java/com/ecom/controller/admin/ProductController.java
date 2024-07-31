@@ -45,7 +45,7 @@ public class ProductController {
     public String loadAddProduct(Model m) {
         List<Category> categories = categoryService.getAllCategory();
         m.addAttribute("categories", categories);
-        return "redirect:/admin/add_Product";
+        return "admin/add_product";
     }
 
     @PostMapping("/saveProduct")
