@@ -7,6 +7,8 @@ import com.ecom.service.CategoryService;
 import com.ecom.service.ProductService;
 import com.ecom.service.UserService;
 import jakarta.servlet.http.HttpSession;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,6 +21,9 @@ import java.util.List;
 
 @Controller
 public class HomeController {
+
+    private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
+
 
     @Autowired
     private ProductService productService;
@@ -36,16 +41,17 @@ public class HomeController {
 
     @GetMapping("/singing")
     public String login() {
+        logger.info("singing method called");
         return "login";
     }
 
-    @PostMapping("/loginByEmailAndPassword")
-    public String loginSuccess(
-//            @ModelAttribute("loginDetails") UserDtls userDtls, HttpSession session
-    ){
-    //    System.out.println(userDtls.toString());
-        return "/user/home";
-    }
+//    @PostMapping("/loginByEmailAndPassword")
+//    public String loginSuccess(){
+//        //TODO default login is manage by spring security bot by the controller that's why After the login the user redirect to base url not to the user/home.html
+//        logger.info("Attempting to log in user with email: {}");
+//     //   System.out.println(userDtls.toString());
+//        return "/user/home";
+//    }
 
     @GetMapping("/register")
     public String register() {

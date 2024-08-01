@@ -41,7 +41,13 @@ public class SecurityConfig {
                     req.requestMatchers("/user/**").hasRole("USER");
                     req.requestMatchers("/admin/**").hasRole("ADMIN");
                     req.requestMatchers("/**").permitAll();
-                }).formLogin(form -> form.loginPage("/singing").loginProcessingUrl("/loginByEmailAndPassword").defaultSuccessUrl("/"))
+                }).formLogin(form -> form.loginPage("/singing")
+                                //TODO the below loginProcessUrl is managed by spring security
+                                .loginProcessingUrl("/login")
+                                //TODO because you use email attribute(name="email") in your login.html form
+                                .usernameParameter("email")
+                        //.defaultSuccessUrl("/")
+                        )
                 .logout(LogoutConfigurer::permitAll)
                 .httpBasic(Customizer.withDefaults());
         return http.build();
