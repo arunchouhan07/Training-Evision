@@ -33,10 +33,10 @@
 								Logout Sucessfully</div>
 						</div>
 						<div class="card-body">
-							<form action="/login" method="post">
+							<form action="/loginByEmailAndPassword" method="post">
 								<div class="mb-3">
 									<label class="form-label">Email</label> <input
-										class="form-control" name="username" type="email">
+										class="form-control" name="email" type="email">
 								</div>
 
 								<div class="mb-3">
@@ -50,7 +50,7 @@
 
 						<div class="card-footer text-center">
 							<a href="/forgot-password" class="text-decoration-none">Forgot Password</a><br>
-							Don't have an account ? <a href="#" class="text-decoration-none">Create
+							Don't have an account ? <a href="/register" class="text-decoration-none">Create
 								one </a>
 						</div>
 					</div>

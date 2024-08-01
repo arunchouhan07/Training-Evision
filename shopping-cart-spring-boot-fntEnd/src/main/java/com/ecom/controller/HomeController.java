@@ -34,9 +34,17 @@ public class HomeController {
         return "index";
     }
 
-    @GetMapping("/signin")
+    @GetMapping("/singing")
     public String login() {
         return "login";
+    }
+
+    @PostMapping("/loginByEmailAndPassword")
+    public String loginSuccess(
+//            @ModelAttribute("loginDetails") UserDtls userDtls, HttpSession session
+    ){
+    //    System.out.println(userDtls.toString());
+        return "/user/home";
     }
 
     @GetMapping("/register")

@@ -5,6 +5,7 @@ import com.ecom.repository.UserRepository;
 import com.ecom.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,10 +23,15 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Override
     public UserDtls saveUser(UserDtls user, MultipartFile file) throws IOException {
         String imageName = (!file.isEmpty() && file != null) ? file.getOriginalFilename() : "default.jpg";
         user.setProfileImage(imageName);
+        user.setRole("ROLE_USER");
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         UserDtls savedUser = userRepository.save(user);
         if(!ObjectUtils.isEmpty(savedUser))
         {
@@ -39,5 +45,25 @@ public class UserServiceImpl implements UserService {
             }
         }
         return savedUser;
+    }
+
+    @Override
+    public void increaseFailedAttempt(UserDtls user) throws IOException {
+
+    }
+
+    @Override
+    public void userAccountLock(UserDtls user) throws IOException {
+
+    }
+
+    @Override
+    public boolean unlockAccountTimeExpired(UserDtls user) throws IOException {
+        return false;
+    }
+
+    @Override
+    public void resetAttempt(int userId) {
+
     }
 }

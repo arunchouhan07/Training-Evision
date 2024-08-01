@@ -7,6 +7,15 @@ import java.io.IOException;
 
 public interface UserService {
 
-    public UserDtls saveUser(UserDtls user, MultipartFile file) throws IOException;
+    UserDtls saveUser(UserDtls user, MultipartFile file) throws IOException;
+
+    void increaseFailedAttempt(UserDtls user) throws IOException;
+
+    void userAccountLock(UserDtls user) throws IOException;
+
+    boolean unlockAccountTimeExpired(UserDtls user) throws IOException;
+
+    public void resetAttempt(int userId);
+
 
 }
