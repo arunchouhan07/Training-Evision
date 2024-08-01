@@ -30,7 +30,6 @@ public class CustomUser implements UserDetails {
         String role=userDtls.getRole();
         logger.info("User role: {}", role);
         SimpleGrantedAuthority authority = new SimpleGrantedAuthority(userDtls.getRole());
-        System.out.println(userDtls.getRole());
         return Arrays.asList(authority);
     }
 
