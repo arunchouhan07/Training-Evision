@@ -1,7 +1,9 @@
 package com.ecom.controller.admin;
 
 import com.ecom.model.Category;
+import com.ecom.model.UserDtls;
 import com.ecom.service.CategoryService;
+import com.ecom.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -17,6 +19,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.security.Principal;
+import java.util.List;
 
 @Controller
 @RequestMapping("/admin")
@@ -24,6 +28,9 @@ public class CategoryController {
 
     @Autowired
     private CategoryService categoryService;
+
+    @Autowired
+    private UserService userService;
 
     @GetMapping()
     public String index(){
@@ -115,5 +122,16 @@ public class CategoryController {
             session.setAttribute("errorMsg","Something went wrong");
         }
         return "redirect:/admin/category";
+    }
+
+    @ModelAttribute
+    public void getUserDetails(Principal principal, Model model){
+        if(principal != null){
+            String email = principal.getName();
+            UserDtls userByEmail = userService.getUserByEmail(email);
+            model.addAttribute("user", userByEmail);
+        }
+        List<Category> allActiveCategory = categoryService.getAllActiveCategory();
+        model.addAttribute("categories",allActiveCategory);
     }
 }

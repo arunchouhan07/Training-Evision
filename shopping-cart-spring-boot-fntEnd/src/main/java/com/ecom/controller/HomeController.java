@@ -17,13 +17,13 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.security.Principal;
 import java.util.List;
 
 @Controller
 public class HomeController {
 
     private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
-
 
     @Autowired
     private ProductService productService;
@@ -41,6 +41,12 @@ public class HomeController {
 
     @GetMapping("/singing")
     public String login() {
+        logger.info("singing method called");
+        return "login";
+    }
+
+    @GetMapping("/login")
+    public String login1() {
         logger.info("singing method called");
         return "login";
     }
@@ -65,7 +71,7 @@ public class HomeController {
         model.addAttribute("products", allProducts);
         model.addAttribute("categories", allActiveCategory);
         model.addAttribute("paramValue",category);
-        return "/product.html";
+        return "product";
     }
 
     @GetMapping("/product/{id}")
@@ -82,10 +88,21 @@ public class HomeController {
         UserDtls saveUser = userService.saveUser(user,file);
 
         if (!ObjectUtils.isEmpty(saveUser)) {
-            return "successRegister.html";
+            return "successRegister";
         }
 
-        return "errorRegister.html";
+        return "errorRegister";
+    }
+
+    @ModelAttribute
+    public void getUserDetails(Principal principal,Model model){
+        if(principal != null){
+            String email = principal.getName();
+            UserDtls userByEmail = userService.getUserByEmail(email);
+            model.addAttribute("user", userByEmail);
+        }
+        List<Category> allActiveCategory = categoryService.getAllActiveCategory();
+        model.addAttribute("categories", allActiveCategory);
     }
 
 }

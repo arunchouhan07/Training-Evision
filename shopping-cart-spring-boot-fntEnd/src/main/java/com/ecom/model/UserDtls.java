@@ -36,7 +36,7 @@ public class UserDtls {
 
     private String role;
 
-//	private Boolean isEnable;
+	private Boolean isEnable;
 //
 //	private Boolean accountNonLocked;
 //

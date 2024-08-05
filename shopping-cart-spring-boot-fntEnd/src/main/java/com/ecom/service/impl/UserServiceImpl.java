@@ -16,6 +16,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -32,7 +34,9 @@ public class UserServiceImpl implements UserService {
         user.setProfileImage(imageName);
         user.setRole("ROLE_USER");
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setIsEnable(true);
         UserDtls savedUser = userRepository.save(user);
+
         if(!ObjectUtils.isEmpty(savedUser))
         {
             if(file != null && !file.isEmpty()){
@@ -45,6 +49,11 @@ public class UserServiceImpl implements UserService {
             }
         }
         return savedUser;
+    }
+
+    @Override
+    public UserDtls getUserByEmail(String email) {
+        return userRepository.findByEmail(email);
     }
 
     @Override
@@ -65,5 +74,22 @@ public class UserServiceImpl implements UserService {
     @Override
     public void resetAttempt(int userId) {
 
+    }
+
+    @Override
+    public List<UserDtls> getAllUsers() {
+        return userRepository.findByRole("ROLE_USER");
+    }
+
+    @Override
+    public Boolean updateUserAcountStatus(Integer id, Boolean status) {
+        Optional<UserDtls> userById = userRepository.findById(id);
+        if(userById.isPresent()) {
+            UserDtls user = userById.get();
+            user.setIsEnable(status);
+            userRepository.save(user);
+            return true;
+        }
+        return false;
     }
 }

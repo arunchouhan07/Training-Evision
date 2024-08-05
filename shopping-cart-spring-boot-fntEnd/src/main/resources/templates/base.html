@@ -41,7 +41,7 @@
 						class="nav-link dropdown-toggle" href="#" role="button"
 						data-bs-toggle="dropdown" aria-expanded="false"> Category </a>
 						<ul class="dropdown-menu">
-							<li th:each="c:${categorys}"><a class="dropdown-item"
+							<li th:each="c:${categories}"><a class="dropdown-item"
 								th:href="@{'/products?category='+${c.name}}">[[${c.name}]]</a></li>
 
 						</ul></li>
