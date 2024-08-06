@@ -3,6 +3,8 @@ package com.ecom.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Date;
+
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -37,12 +39,12 @@ public class UserDtls {
     private String role;
 
 	private Boolean isEnable;
-//
-//	private Boolean accountNonLocked;
-//
-//	private Integer failedAttempt;
-//
-//	private Date lockTime;
+
+	private Boolean accountNonLocked;
+
+	private Integer failedAttempt;
+
+	private Date lockTime;
 
 //	private String resetToken;
 

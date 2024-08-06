@@ -1,8 +1,12 @@
 package com.ecom.config;
 
 import com.ecom.model.UserDtls;
+import com.ecom.service.UserService;
+import com.ecom.service.impl.UserServiceImpl;
+import com.ecom.util.AppConstant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,6 +15,8 @@ import java.util.Arrays;
 import java.util.Collection;
 
 public class CustomUser implements UserDetails {
+
+    UserService userService=new UserServiceImpl();
 
     private static final Logger logger = LoggerFactory.getLogger(CustomUser.class);
 
@@ -50,7 +56,15 @@ public class CustomUser implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+//        System.out.println(userDtls.getLockTime().getTime());
+//        System.out.println(AppConstant.UNLOCK_DURATION_TIME);
+//        System.out.println(userDtls.getLockTime().getTime()+AppConstant.UNLOCK_DURATION_TIME);
+//        System.out.println(System.currentTimeMillis());
+//        System.out.println(userDtls.getAccountNonLocked());
+//        System.out.println(System.currentTimeMillis() > userDtls.getLockTime().getTime()+(AppConstant.UNLOCK_DURATION_TIME));
+//        System.out.println(userService.unlockAccountTimeExpire(userDtls));
+//        return userDtls.getAccountNonLocked() || userService.unlockAccountTimeExpire(userDtls);
+          return userDtls.getAccountNonLocked() || (System.currentTimeMillis() > (userDtls.getLockTime().getTime()+AppConstant.UNLOCK_DURATION_TIME)*10);
     }
 
     @Override

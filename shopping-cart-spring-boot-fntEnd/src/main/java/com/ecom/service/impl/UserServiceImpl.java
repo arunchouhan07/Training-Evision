@@ -3,7 +3,9 @@ package com.ecom.service.impl;
 import com.ecom.model.UserDtls;
 import com.ecom.repository.UserRepository;
 import com.ecom.service.UserService;
+import com.ecom.util.AppConstant;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,6 +38,9 @@ public class UserServiceImpl implements UserService {
         user.setRole("ROLE_USER");
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setIsEnable(true);
+        user.setLockTime(null);
+        user.setFailedAttempt(0);
+        user.setAccountNonLocked(true);
         UserDtls savedUser = userRepository.save(user);
 
         if(!ObjectUtils.isEmpty(savedUser))
@@ -58,18 +64,20 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void increaseFailedAttempt(UserDtls user) throws IOException {
-
+        int attempt = user.getFailedAttempt() + 1;
+        user.setFailedAttempt(attempt);
+        userRepository.save(user);
     }
 
-    @Override
-    public void userAccountLock(UserDtls user) throws IOException {
+//    @Override
+//    public void userAccountLock(UserDtls user) throws IOException {
+//
+//    }
 
-    }
-
-    @Override
-    public boolean unlockAccountTimeExpired(UserDtls user) throws IOException {
-        return false;
-    }
+//    @Override
+//    public boolean unlockAccountTimeExpired(UserDtls user) throws IOException {
+//        return false;
+//    }
 
     @Override
     public void resetAttempt(int userId) {
@@ -88,6 +96,29 @@ public class UserServiceImpl implements UserService {
             UserDtls user = userById.get();
             user.setIsEnable(status);
             userRepository.save(user);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void accountLock(UserDtls userDtls) {
+        userDtls.setAccountNonLocked(false);
+        userDtls.setLockTime(new Date());
+        userRepository.save(userDtls);
+    }
+
+    @Override
+    public boolean unlockAccountTimeExpire(UserDtls userDtls) {
+        long lockTime = userDtls.getLockTime().getTime();
+        long unlockTime = lockTime+ AppConstant.UNLOCK_DURATION_TIME;
+        long currentTimeMilisecond = System.currentTimeMillis();
+
+        if(unlockTime<currentTimeMilisecond){
+            userDtls.setAccountNonLocked(true);
+            userDtls.setFailedAttempt(0);
+            userDtls.setLockTime(null);
+            userRepository.save(userDtls);
             return true;
         }
         return false;
