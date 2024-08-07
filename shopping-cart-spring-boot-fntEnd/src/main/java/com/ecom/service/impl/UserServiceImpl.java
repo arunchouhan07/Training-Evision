@@ -4,8 +4,11 @@ import com.ecom.model.UserDtls;
 import com.ecom.repository.UserRepository;
 import com.ecom.service.UserService;
 import com.ecom.util.AppConstant;
+import com.ecom.util.CommonUtil;
+import jakarta.activation.CommandMap;
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -14,22 +17,21 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.nio.file.*;
+import java.util.*;
 
 @Service
+@Slf4j
 public class UserServiceImpl implements UserService {
 
-    @Autowired
+     @Autowired
     private UserRepository userRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private CommonUtil commonUtil;
 
     @Override
     public UserDtls saveUser(UserDtls user, MultipartFile file) throws IOException {
@@ -67,21 +69,6 @@ public class UserServiceImpl implements UserService {
         int attempt = user.getFailedAttempt() + 1;
         user.setFailedAttempt(attempt);
         userRepository.save(user);
-    }
-
-//    @Override
-//    public void userAccountLock(UserDtls user) throws IOException {
-//
-//    }
-
-//    @Override
-//    public boolean unlockAccountTimeExpired(UserDtls user) throws IOException {
-//        return false;
-//    }
-
-    @Override
-    public void resetAttempt(int userId) {
-
     }
 
     @Override
@@ -123,4 +110,43 @@ public class UserServiceImpl implements UserService {
         }
         return false;
     }
+
+    @Override
+    public Boolean sendForgotPasswordToMail(String email, HttpServletRequest request) {
+        UserDtls userByEmail = userRepository.findByEmail(email);
+        log.info("User Find By Mail :"+userByEmail);
+        if(ObjectUtils.isEmpty(userByEmail)){
+            log.info("User Can't Find with Given Email "+email);
+            return false;
+        }else{
+            String resetToken = UUID.randomUUID().toString();
+            userByEmail.setResetToken(resetToken);
+            userRepository.save(userByEmail);
+
+            String url = CommonUtil.genrateUrl(request)+"/reset-password?token="+resetToken;
+            log.info("User Mail is: "+userByEmail.getEmail());
+            log.info("Reset Password Url is: "+url);
+
+            Boolean sendMail = commonUtil.sendMail(userByEmail.getEmail(),url);
+            if(sendMail ){
+                log.info("Send Mail Success");
+                return true;
+            }else{
+                log.info("Internal Server error");
+                return false;
+            }
+        }
+    }
+
+    @Override
+    public UserDtls getUserByToken(String token) {
+        return userRepository.findByResetToken(token);
+
+    }
+
+    @Override
+    public int updateUser(UserDtls userDtls) {
+        return userRepository.updateUserPassword(userDtls.getEmail(),userDtls.getPassword());
+    }
+
 }

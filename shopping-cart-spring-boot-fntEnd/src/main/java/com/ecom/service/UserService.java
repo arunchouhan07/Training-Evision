@@ -1,10 +1,10 @@
 package com.ecom.service;
 
 import com.ecom.model.UserDtls;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.Date;
 import java.util.List;
 
 public interface UserService {
@@ -15,8 +15,6 @@ public interface UserService {
 
     void increaseFailedAttempt(UserDtls user) throws IOException;
 
-    public void resetAttempt(int userId);
-
     List<UserDtls> getAllUsers();
 
     Boolean updateUserAcountStatus(Integer id, Boolean status);
@@ -25,4 +23,9 @@ public interface UserService {
 
     public boolean unlockAccountTimeExpire(UserDtls userDtls);
 
+    public Boolean sendForgotPasswordToMail(String email, HttpServletRequest request);
+
+    UserDtls getUserByToken(String token);
+
+    public int updateUser(UserDtls userDtls);
 }

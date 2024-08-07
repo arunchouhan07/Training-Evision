@@ -6,13 +6,16 @@ import com.ecom.model.UserDtls;
 import com.ecom.service.CategoryService;
 import com.ecom.service.ProductService;
 import com.ecom.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.ObjectUtils;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -33,6 +36,8 @@ public class HomeController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @GetMapping("/")
     public String index() {
@@ -49,6 +54,67 @@ public class HomeController {
     public String login1() {
         logger.info("singing method called");
         return "login";
+    }
+
+    @GetMapping("/forgot-password")
+    public String forgetPassword() {
+        logger.info("forget-password method called");
+        return "forgot_password";
+    }
+
+    @PostMapping("/forgot-password")
+    public String forgotPassword(@RequestParam String email, HttpServletRequest request) {
+        logger.info("forgot-password from post called method called");
+
+//        if (result.hasErrors()) {
+//            return "redirect:/forgot-password";
+//        }
+
+        logger.info("Mail is "+email);
+        Boolean b = userService.sendForgotPasswordToMail(email,request);
+        if (!b) {
+//            result.rejectValue("email", null, "We could not find an account for that e-mail address.");
+            return "redirect:/forgot-password";
+        }
+
+        return "redirect:/forgot-password";
+    }
+
+    @GetMapping("/reset-password")
+    public String resetPassword(@RequestParam String token, Model model) {
+          UserDtls userByToken = userService.getUserByToken(token);
+        if(userByToken == null) {
+               model.addAttribute("msg", "Your link is invalid or expired !!");
+            return "message";
+        }
+        model.addAttribute("token",token);
+        return "reset_password";
+
+    }
+
+    @PostMapping("/reset-password")
+    public String resetPasswordFromMail(@RequestParam String token, @RequestParam String password, Model model){
+        logger.info("reset-password method called from mail");
+        UserDtls userByToken = userService.getUserByToken(token);
+        if(userByToken == null) {
+            logger.info("User not found from token");
+            model.addAttribute("msg", "Your link is invalid or expired !!");
+            return "message";
+        }else {
+            logger.info("user found from token");
+            userByToken.setPassword(passwordEncoder.encode(password));
+            userByToken.setResetToken(null);
+            int updateUserPassword = userService.updateUser(userByToken);
+            if (updateUserPassword!=1){
+                logger.info("User Password Not Updated");
+                model.addAttribute("msg","Password Not Reset");
+                return "redirect:/forgot-password";
+            }else{
+                logger.info("User Password Updated");
+                model.addAttribute("msg","Password Reset Successful");
+            }
+            return "message";
+        }
     }
 
 //    @PostMapping("/loginByEmailAndPassword")
