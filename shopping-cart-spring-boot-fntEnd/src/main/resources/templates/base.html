@@ -62,7 +62,7 @@
 
 					<th:block th:if="${user!=null}">
 						<li class="nav-item"><a class="nav-link active"
-							aria-current="page" href="/user/cart"><i
+							aria-current="page" th:href="@{'/user/cart?uid='+${user.id}}"><i
 								class="fa-solid fa-cart-shopping"></i> Cart [ [[${countCart}]] ]</a></li>
 
 						<li class="nav-item dropdown"><a
