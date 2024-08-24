@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserService {
     public UserDtls saveUser(UserDtls user, MultipartFile file) throws IOException {
         String imageName = (!file.isEmpty() && file != null) ? file.getOriginalFilename() : "default.jpg";
         user.setProfileImage(imageName);
-        user.setRole("ROLE_USER");
+        user.setRole("ROLE_ADMIN");
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setIsEnable(true);
         user.setLockTime(null);
