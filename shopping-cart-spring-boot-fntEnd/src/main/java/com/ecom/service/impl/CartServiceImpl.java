@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CartServiceImpl implements CartService {
@@ -39,7 +38,7 @@ public class CartServiceImpl implements CartService {
              cart.setProduct(product);
              cart.setQuantity(1);
              cart.setProductPrice(product.getPrice());
-             cart.setTotalPrice(product.getPrice());
+             cart.setTotalPrice(product.getDiscountPrice());
         }else{
             cart=getCartDetails;
             cart.setQuantity(cart.getQuantity()+1);
@@ -51,6 +50,35 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public List<Cart> getAllCartForUser(Integer userId) {
-        return cartRepository.findAllProductByUserDtlsId(userId);
+        List<Cart> allProductByUserDtlsId = cartRepository.findAllProductByUserDtlsId(userId);
+        allProductByUserDtlsId.stream().forEach(cart->cart.setTotalPrice(cart.getProduct().getDiscountPrice()*cart.getQuantity()));
+        return allProductByUserDtlsId;
+    }
+
+    @Override
+    public Integer getCartCountForUser(Integer userId) {
+        return cartRepository.countProductByUserDtlsId(userId);
+    }
+
+    @Override
+    public Cart updateCartQuantityForUser(String sy, Integer cid) {
+        Cart cart = cartRepository.findById(cid).get();
+
+        if(sy.equals("de")) {
+            if (cart.getQuantity() <= 1) {
+                cartRepository.delete(cart);
+            }
+            else{
+                cart.setQuantity(cart.getQuantity() - 1);
+                cart.setTotalPrice(cart.getTotalPrice()-cart.getProduct().getDiscountPrice());
+                cartRepository.save(cart);
+            }
+        }else if(sy.equals("in")){
+            cart.setQuantity(cart.getQuantity()+1);
+            cart.setTotalPrice(cart.getTotalPrice()+cart.getProduct().getDiscountPrice());
+            cartRepository.save(cart);
+        }
+
+        return cart;
     }
 }

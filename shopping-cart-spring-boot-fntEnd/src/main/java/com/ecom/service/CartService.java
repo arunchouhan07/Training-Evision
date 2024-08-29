@@ -9,4 +9,8 @@ public interface CartService {
     Cart saveInCartForUser(Integer productId, Integer userId);
 
     List<Cart> getAllCartForUser(Integer userId);
+
+    Integer getCartCountForUser(Integer userId);
+
+    Cart updateCartQuantityForUser(String sy, Integer cid);
 }
