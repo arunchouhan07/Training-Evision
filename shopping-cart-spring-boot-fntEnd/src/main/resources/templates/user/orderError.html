@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Order Placed</title>
+    <script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script>
+    <style>
+        body {
+            background-color: #f0f2f5;
+            display: flex;
+            flex-direction: column; /* Stack items vertically */
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+        }
+        .message {
+            margin-top: 20px; /* Space between GIF and text */
+            font-size: 20px;
+            color: #333;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+<dotlottie-player
+        src="https://lottie.host/edf44703-637a-4cf7-afe2-ad8f65eee7a0/cL0KtiGoo4.json"
+        background="transparent"
+        speed="1"
+        style="width: 300px; height: 300px;"
+        loop autoplay>
+</dotlottie-player>
+<div class="message">
+    Your order not placed! <a href="http://localhost:8080/user/orders">Please try again</a>
+</div>
+</body>
+</html>

@@ -1,6 +1,6 @@
 package com.ecom.config;
 
-import com.ecom.model.UserDtls;
+import com.ecom.entity.UserDtls;
 import com.ecom.repository.UserRepository;
 import com.ecom.service.UserService;
 import com.ecom.util.AppConstant;

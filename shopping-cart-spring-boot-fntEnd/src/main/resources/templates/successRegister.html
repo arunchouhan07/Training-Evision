@@ -1,10 +1,44 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="ISO-8859-1">
-<title>Insert title here</title>
+    <meta charset="UTF-8">
+    <title>Order Placed</title>
+    <script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script>
+    <style>
+        body {
+            background-color: #f0f2f5;
+            display: flex;
+            flex-direction: column; /* Stack items vertically */
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+        }
+        .message {
+            margin-top: 20px; /* Space between GIF and text */
+            font-size: 20px;
+            color: #131359;
+            font-weight: 600;
+        }
+    </style>
 </head>
 <body>
-<h1>Account Created Success</h1>
+<dotlottie-player
+        src="https://lottie.host/caee18f1-7032-40d5-a141-58de675b4054/XKuNhgTHoe.json"
+        background="transparent"
+        speed="1"
+        style="width: 300px; height: 300px;"
+        loop autoplay>
+</dotlottie-player>
+<div class="message">
+    Account Successfully Created <a href="http://localhost:8080/login">Login</a>
+</div>
+<script>
+    var timer = setTimeout(function() {
+        window.location='/login'
+    }, 5000);
+</script>
 </body>
 </html>

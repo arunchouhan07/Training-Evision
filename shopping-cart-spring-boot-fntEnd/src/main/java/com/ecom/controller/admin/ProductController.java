@@ -1,8 +1,8 @@
 package com.ecom.controller.admin;
 
-import com.ecom.model.Category;
-import com.ecom.model.Product;
-import com.ecom.model.UserDtls;
+import com.ecom.entity.Category;
+import com.ecom.entity.Product;
+import com.ecom.entity.UserDtls;
 import com.ecom.service.CategoryService;
 import com.ecom.service.ProductService;
 import com.ecom.service.UserService;
@@ -59,9 +59,8 @@ public class ProductController {
         String imageName=(!multipartFile.isEmpty())? multipartFile.getOriginalFilename() : "default.jpg";
         product.setImage(imageName);
         product.setDiscount(0);
-        product.setDiscountPrice(product.getDiscountPrice());
+        product.setDiscountPrice(product.getPrice());
         Product saveProduct = productService.saveProduct(product);
-
 
         if (!ObjectUtils.isEmpty(saveProduct)) {
 

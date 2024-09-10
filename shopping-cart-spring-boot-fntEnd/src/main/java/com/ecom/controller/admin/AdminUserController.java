@@ -1,6 +1,6 @@
 package com.ecom.controller.admin;
 
-import com.ecom.model.UserDtls;
+import com.ecom.entity.UserDtls;
 import com.ecom.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;

@@ -1,7 +1,7 @@
 package com.ecom.controller.admin;
 
-import com.ecom.model.Category;
-import com.ecom.model.UserDtls;
+import com.ecom.entity.Category;
+import com.ecom.entity.UserDtls;
 import com.ecom.service.CategoryService;
 import com.ecom.service.UserService;
 import jakarta.servlet.http.HttpSession;

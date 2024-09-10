@@ -1,6 +1,6 @@
 package com.ecom.service.impl;
 
-import com.ecom.model.Category;
+import com.ecom.entity.Category;
 import com.ecom.repository.CategoryRepository;
 import com.ecom.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,6 +1,6 @@
 package com.ecom.repository;
 
-import com.ecom.model.Category;
+import com.ecom.entity.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

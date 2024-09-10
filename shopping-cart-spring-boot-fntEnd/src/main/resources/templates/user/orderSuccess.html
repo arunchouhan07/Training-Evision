@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Order Success</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.2.3/animate.min.css">
+    <script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script>
+    <style>
+        body {
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+        }
+        .card {
+            background-color: #ffffff;
+            width: 350px;
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            text-align: center;
+        }
+        .name {
+            color: #4c40e0;
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        .order {
+            font-size: 15px;
+            color: #120a0a;
+            margin-bottom: 15px;
+        }
+        .detail {
+            color: #555555;
+            font-size: 15px;
+            margin-bottom: 20px;
+        }
+        .new {
+            color: #333333;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        .address {
+            color: #777777;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+        .money {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #333333;
+            font-size: 15px;
+            margin-bottom: 15px;
+        }
+        .money img {
+            margin-right: 8px;
+        }
+        .address-line {
+            color: #4c40e0;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .address-line:hover {
+            text-decoration: underline;
+        }
+
+        #success-content {
+            display: none;
+            text-align: center;
+        }
+
+
+    </style>
+</head>
+<body>
+
+<!-- Animation Section -->
+<div id="animation">
+    <dotlottie-player
+                      id="lottiePlayer"
+                      src="https://lottie.host/dec2ee0b-54c3-49fa-a819-1f6753571b4d/Zl3VjIVpVE.json"
+                      background="transparent"
+                      speed="1"
+                      style="width: 400px; height: 400px;"
+                      loop autoplay>
+    </dotlottie-player>
+</div>
+<!-- Order Success Content Section -->
+<div id="success-content">
+    <div class="card animated fadeIn">
+        <img src="https://i.imgur.com/NiAVkEw.png" width="50" alt="Order Icon" class="mb-3">
+        <div class="name">Thank you, [[${orderRequest.firstName}]]</div>
+        <div class="order">OrderId [[${savedProductOrder.orderId}]]</div>
+        <div class="detail">Your order has been confirmed and is on its way!</div>
+        <div class="new">[[${orderRequest.firstName}]][[${orderRequest.lastName}]]</div>
+        <div class="address">[[${orderRequest.address}]], [[${orderRequest.city}]] <br>[[${orderRequest.state}]], [[${orderRequest.pinCode}]]</div>
+        <div class="money">
+            <img src="https://i.imgur.com/ppwgjMU.png" width="20" alt="Payment Method Icon">
+            <span>[[${orderRequest.paymentMethod}]]</span>
+        </div>
+        <div class="address-line">CHANGE MY DELIVERY ADDRESS</div>
+    </div>
+</div>
+<script>
+    window.onload = function() {
+        var lottiePlayer = document.getElementById('lottiePlayer');
+
+        // Wait until the animation is ready
+        lottiePlayer.addEventListener('ready', function() {
+            document.getElementById('animation').style.display = 'block';
+
+            // Start the timer after the animation is displayed
+            setTimeout(function() {
+                document.getElementById('animation').style.display = 'none';
+                document.getElementById('success-content').style.display = 'block';
+            }, 4600);
+        });
+    };
+</script>
+</body>
+</html>

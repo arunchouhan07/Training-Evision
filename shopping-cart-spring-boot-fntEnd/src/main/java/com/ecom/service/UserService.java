@@ -1,6 +1,6 @@
 package com.ecom.service;
 
-import com.ecom.model.UserDtls;
+import com.ecom.entity.UserDtls;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.web.multipart.MultipartFile;
 

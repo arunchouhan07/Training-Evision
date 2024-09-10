@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 
 @Configuration
 public class SecurityConfig {
@@ -61,6 +62,7 @@ public class SecurityConfig {
                         //.defaultSuccessUrl("/")
                         )
                 .logout(LogoutConfigurer::permitAll)
+                .requestCache(requestCache -> requestCache.requestCache(new HttpSessionRequestCache()))
                 .httpBasic(Customizer.withDefaults());
         return http.build();
     }

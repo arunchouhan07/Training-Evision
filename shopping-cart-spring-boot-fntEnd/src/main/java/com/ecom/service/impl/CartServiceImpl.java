@@ -1,8 +1,8 @@
 package com.ecom.service.impl;
 
-import com.ecom.model.Cart;
-import com.ecom.model.Product;
-import com.ecom.model.UserDtls;
+import com.ecom.entity.Cart;
+import com.ecom.entity.Product;
+import com.ecom.entity.UserDtls;
 import com.ecom.repository.CartRepository;
 import com.ecom.repository.ProductRepository;
 import com.ecom.repository.UserRepository;
@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -25,6 +26,8 @@ public class CartServiceImpl implements CartService {
     @Autowired
     private UserRepository userRepository;
 
+    List<Cart> allProductByUserDtlsId = new ArrayList<Cart>();
+
     @Override
     public Cart saveInCartForUser(Integer productId, Integer userId) {
         Cart getCartDetails = cartRepository.findByUserDtlsIdAndProductId(userId, productId);
@@ -37,22 +40,31 @@ public class CartServiceImpl implements CartService {
              cart.setUserDtls(userDtls);
              cart.setProduct(product);
              cart.setQuantity(1);
-             cart.setProductPrice(product.getPrice());
              cart.setTotalPrice(product.getDiscountPrice());
         }else{
             cart=getCartDetails;
             cart.setQuantity(cart.getQuantity()+1);
-            cart.setProductPrice(product.getPrice());
-            cart.setTotalPrice(cart.getQuantity()*product.getPrice());
+            cart.setTotalPrice(cart.getQuantity()*product.getDiscountPrice());
         }
+        cart.setAllOverPrice(cart.getTotalPrice());
         return cartRepository.save(cart);
     }
 
     @Override
     public List<Cart> getAllCartForUser(Integer userId) {
-        List<Cart> allProductByUserDtlsId = cartRepository.findAllProductByUserDtlsId(userId);
-        allProductByUserDtlsId.stream().forEach(cart->cart.setTotalPrice(cart.getProduct().getDiscountPrice()*cart.getQuantity()));
+        allProductByUserDtlsId = cartRepository.findAllProductByUserDtlsId(userId);
+
         return allProductByUserDtlsId;
+    }
+
+    @Override
+    public Double getOverAllPrice(){
+        double allAddedPrice = 0.0;
+        allAddedPrice = allProductByUserDtlsId.stream()
+                .map(Cart::getTotalPrice).reduce(0.0, Double::sum);
+        double finalAllAddedPrice = allAddedPrice;
+        allProductByUserDtlsId.stream().forEach(cart->cart.setAllOverPrice(finalAllAddedPrice));
+        return allAddedPrice;
     }
 
     @Override

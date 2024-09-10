@@ -1,8 +1,8 @@
 package com.ecom.controller;
 
-import com.ecom.model.Category;
-import com.ecom.model.Product;
-import com.ecom.model.UserDtls;
+import com.ecom.entity.Category;
+import com.ecom.entity.Product;
+import com.ecom.entity.UserDtls;
 import com.ecom.service.CartService;
 import com.ecom.service.CategoryService;
 import com.ecom.service.ProductService;
@@ -16,7 +16,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.ObjectUtils;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -51,13 +50,11 @@ public class HomeController {
 
     @GetMapping("/singing")
     public String login() {
-        logger.info("singing method called");
-        return "login";
+        return "redirect:/login";
     }
 
     @GetMapping("/login")
     public String login1() {
-        logger.info("singing method called");
         return "login";
     }
 
@@ -71,14 +68,9 @@ public class HomeController {
     public String forgotPassword(@RequestParam String email, HttpServletRequest request) {
         logger.info("forgot-password from post called method called");
 
-//        if (result.hasErrors()) {
-//            return "redirect:/forgot-password";
-//        }
-
         logger.info("Mail is "+email);
         Boolean b = userService.sendForgotPasswordToMail(email,request);
         if (!b) {
-//            result.rejectValue("email", null, "We could not find an account for that e-mail address.");
             return "redirect:/forgot-password";
         }
 
@@ -177,5 +169,4 @@ public class HomeController {
         List<Category> allActiveCategory = categoryService.getAllActiveCategory();
         model.addAttribute("categories", allActiveCategory);
     }
-
 }

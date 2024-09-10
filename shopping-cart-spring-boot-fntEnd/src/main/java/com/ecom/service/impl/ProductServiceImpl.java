@@ -1,6 +1,6 @@
 package com.ecom.service.impl;
 
-import com.ecom.model.Product;
+import com.ecom.entity.Product;
 import com.ecom.repository.ProductRepository;
 import com.ecom.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ProductServiceImpl implements ProductService {

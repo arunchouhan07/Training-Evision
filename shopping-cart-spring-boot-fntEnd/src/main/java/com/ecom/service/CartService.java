@@ -1,6 +1,6 @@
 package com.ecom.service;
 
-import com.ecom.model.Cart;
+import com.ecom.entity.Cart;
 
 import java.util.List;
 
@@ -9,6 +9,8 @@ public interface CartService {
     Cart saveInCartForUser(Integer productId, Integer userId);
 
     List<Cart> getAllCartForUser(Integer userId);
+
+    Double getOverAllPrice();
 
     Integer getCartCountForUser(Integer userId);
 

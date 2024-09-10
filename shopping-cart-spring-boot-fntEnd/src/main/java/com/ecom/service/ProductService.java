@@ -1,6 +1,6 @@
 package com.ecom.service;
 
-import com.ecom.model.Product;
+import com.ecom.entity.Product;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;

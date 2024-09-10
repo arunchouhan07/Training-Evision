@@ -1,6 +1,6 @@
 package com.ecom.config;
 
-import com.ecom.model.UserDtls;
+import com.ecom.entity.UserDtls;
 import com.ecom.repository.UserRepository;
 import com.ecom.service.UserService;
 import jakarta.servlet.ServletException;
@@ -13,8 +13,8 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -30,7 +30,6 @@ public class AuthSuccessHandlerImpl implements AuthenticationSuccessHandler {
     @Autowired
             private UserRepository userRepository;
 
-    Logger logger= LoggerFactory.getLogger(AuthSuccessHandlerImpl.class);
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
@@ -43,10 +42,21 @@ public class AuthSuccessHandlerImpl implements AuthenticationSuccessHandler {
         userRepository.save(userByEmail);
 
 
-        if(roles.contains("ROLE_ADMIN")) {
-            response.sendRedirect("/admin");
-        }else{
-            response.sendRedirect("/");
+//        if(roles.contains("ROLE_ADMIN")) {
+//            response.sendRedirect("/admin");
+//        }else{
+//            response.sendRedirect("/");
+//        }
+
+
+        SavedRequest savedRequest = (SavedRequest) request.getSession().getAttribute("SPRING_SECURITY_SAVED_REQUEST");
+        String targetUrl = (savedRequest != null) ? savedRequest.getRedirectUrl() : "/";
+
+        if(roles.contains("ROLE_ADMIN")){
+            if(targetUrl == "/"){
+                targetUrl = "/admin";
+            }
         }
+        response.sendRedirect(targetUrl);
     }
 }

@@ -19,43 +19,43 @@
 							<p class="text-center fs-4">Billing Address</p>
 							<hr>
 							<div class="col p-1">
-								<label>First Name</label> <input type="text" name="firstName" required
+								<label>First Name</label> <input type="text" name="firstName" th:value="${user.getName().substring(0,user.getName().indexOf(' '))}" required
 									class="form-control mt-1">
 							</div>
 							<div class="col p-1">
-								<label>Last Name</label> <input type="text" name="lastName" required
+								<label>Last Name</label> <input type="text" name="lastName" th:value="${user.getName().substring(user.getName().indexOf(' '))}" required
 									class="form-control mt-1">
 							</div>
 						</div>
 
 						<div class="mb-3 row">
 							<div class="col p-1">
-								<label>Email</label> <input type="email" name="email" required
+								<label>Email</label> <input type="email" name="email" th:value="${user.email}" required
 									class="form-control col">
 							</div>
 							<div class="col p-1">
-								<label>Mobile Number</label> <input type="text" name="mobileNo" required
+								<label>Mobile Number</label> <input type="text" name="phone" th:value="${user.mobileNumber}" required
 									class="form-control col ms-2">
 							</div>
 						</div>
 
 						<div class="mb-3 row">
 							<div class="col p-1">
-								<label>Address</label> <input type="text" name="address" required
+								<label>Address</label> <input type="text" name="address" th:value="${user.address}" required
 									class="form-control col">
 							</div>
 							<div class="col p-1">
-								<label>City</label> <input type="text" name="city" required
+								<label>City</label> <input type="text" name="city" th:value="${user.city}" required
 									class="form-control col ms-2">
 							</div>
 						</div>
 						<div class="mb-3 row">
 							<div class="col p-1">
-								<label>State</label> <input type="text" name="state" required
+								<label>State</label> <input type="text" name="state" th:value="${user.state}" required
 									class="form-control col">
 							</div>
 							<div class="col p-1">
-								<label>Pincode</label> <input type="number" name="pincode" required
+								<label>Pincode</label> <input type="number" name="pinCode" th:value="${user.pincode}" required
 									class="form-control col ms-2">
 							</div>
 						</div>
@@ -72,7 +72,7 @@
 										<tr>
 											<td>Total price</td>
 											<td>:</td>
-											<td>&#8377; 345323</td>
+											<td>&#8377; [[${overAllPrice}]]</td>
 										</tr>
 										<tr>
 											<td>Delivery Fee</td>
@@ -89,7 +89,7 @@
 										<tr class="border-top">
 											<td>Total Price</td>
 											<td>:</td>
-											<td>&#8377; 235324</td>
+											<td>&#8377; [[${overAllPrice}+250+100]]</td>
 										</tr>
 									</tbody>
 								</table>
@@ -101,9 +101,9 @@
 							<div class="card-body">
 								<!-- <form action="/login" method="post"> -->
 								<div class="mb-3">
-									<label class="form-label">Select Payment Type</label> <select required
-										name="paymentType" class="form-control">
-										<option>--select--</option>
+									<label class="form-label">Select Payment Type</label>
+									<select required
+										name="paymentMethod" class="form-control">
 										<option value="COD">Cash On Delivery</option>
 										<option value="ONLINE">Online Payment</option>
 									</select>
@@ -112,7 +112,6 @@
 
 								<button class="btn bg-primary text-white col-md-12">Place
 									Order</button>
-
 							</div>
 						</div>
 					</div>

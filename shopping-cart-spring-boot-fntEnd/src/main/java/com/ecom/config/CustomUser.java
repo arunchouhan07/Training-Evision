@@ -1,12 +1,11 @@
 package com.ecom.config;
 
-import com.ecom.model.UserDtls;
+import com.ecom.entity.UserDtls;
 import com.ecom.service.UserService;
 import com.ecom.service.impl.UserServiceImpl;
 import com.ecom.util.AppConstant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

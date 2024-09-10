@@ -1,6 +1,6 @@
 package com.ecom.service;
 
-import com.ecom.model.Category;
+import com.ecom.entity.Category;
 
 import java.util.List;
 

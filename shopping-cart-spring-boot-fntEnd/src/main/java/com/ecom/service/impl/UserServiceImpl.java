@@ -1,11 +1,10 @@
 package com.ecom.service.impl;
 
-import com.ecom.model.UserDtls;
+import com.ecom.entity.UserDtls;
 import com.ecom.repository.UserRepository;
 import com.ecom.service.UserService;
 import com.ecom.util.AppConstant;
 import com.ecom.util.CommonUtil;
-import jakarta.activation.CommandMap;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
