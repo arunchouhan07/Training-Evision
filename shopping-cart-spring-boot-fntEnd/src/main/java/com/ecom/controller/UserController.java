@@ -9,7 +9,6 @@ import com.ecom.repository.CartRepository;
 import com.ecom.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.util.Optionals;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.ObjectUtils;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/user")
@@ -73,6 +71,11 @@ public class UserController {
         model.addAttribute("overAllPrice", overAllPrice);
         model.addAttribute("user", loggedInUserDetails);
         return "user/order";
+    }
+
+    @GetMapping("/myOrders")
+    public String myOrders(Model model, Principal principal) {
+        return "user/myOrders";
     }
 
     @PostMapping("/save-order")

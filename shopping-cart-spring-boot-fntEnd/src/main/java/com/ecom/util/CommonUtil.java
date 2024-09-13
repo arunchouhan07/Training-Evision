@@ -42,7 +42,7 @@ public class CommonUtil {
         }
     }
 
-    public static String genrateUrl(HttpServletRequest request) {
+    public static String generateUrl(HttpServletRequest request) {
 //        http://localhost:8080/forgot-password
         String siteUrl = request.getRequestURL().toString();
         return siteUrl.replace(request.getServletPath(),"");

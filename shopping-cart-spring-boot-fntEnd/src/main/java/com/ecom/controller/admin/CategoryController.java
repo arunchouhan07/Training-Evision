@@ -3,6 +3,7 @@ package com.ecom.controller.admin;
 import com.ecom.entity.Category;
 import com.ecom.entity.UserDtls;
 import com.ecom.service.CategoryService;
+import com.ecom.service.ImageService;
 import com.ecom.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,9 @@ public class CategoryController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private ImageService imageService;
+
     @GetMapping()
     public String index(){
         return "admin/index";
@@ -44,31 +48,21 @@ public class CategoryController {
 
     @PostMapping("/saveCategory")
     public String saveCategory(@ModelAttribute Category category, @RequestParam("file") MultipartFile file, HttpSession session) throws IOException {
-        String imageName=(!file.isEmpty())? file.getOriginalFilename() : "default.jpg";
-        category.setImageName(imageName);
+        String uploadImageUrl = imageService.upload(file);
         Boolean existCategory = categoryService.existCategory(category.getName());
         if(existCategory)
         {
             session.setAttribute("errorMessage", "Category Name Already Exists");
-            return "/admin/errorCategory.html";
+            return "/admin/errorCategory";
         }else{
+            category.setImageUrl(uploadImageUrl);
             int saveCategory = categoryService.saveCategory(category);
             if(saveCategory!=1){
                 session.setAttribute("errorMessage","Not Saved ! internal Server Error");
-                  return "/admin/errorCategory.html";
-            }else {
-                File saveFile = new ClassPathResource("static/img").getFile();
-
-                Path path = Paths.get(saveFile.getAbsolutePath() + File.separator + "category_img" + File.separator
-                        + imageName);
-
-                System.out.println(path);
-                Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
-
-
-                session.setAttribute("Success","Saved successfully");
+                return "/admin/errorCategory";
             }
         }
+        session.setAttribute("Success","Saved successfully");
         return "admin/successCategory";
     }
 
@@ -92,18 +86,13 @@ public class CategoryController {
     @PostMapping("/updateCategory")
     public String updateCategory(@ModelAttribute Category category, @RequestParam("file") MultipartFile multipartFile, HttpSession session) throws IOException {
         Category c = categoryService.getCategoryById(category.getId());
-        String fileName=(!multipartFile.isEmpty())? multipartFile.getOriginalFilename():c.getImageName();
+        String uploadImageUrl = imageService.upload(multipartFile);
 
             c.setName(category.getName());
             c.setIsActive(category.getIsActive());
-            c.setImageName(fileName);
+            c.setImageUrl(uploadImageUrl);
 
         int updateCategory=categoryService.updateCategory(c);
-        File saveFile = new ClassPathResource("static/img").getFile();
-
-        Path path = Paths.get(saveFile.getAbsolutePath() + File.separator + "category_img" + File.separator + fileName);
-
-        Files.copy(multipartFile.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
 
         if(!ObjectUtils.isEmpty(updateCategory)){
             session.setAttribute("SuccessMessage","Category update successfully");

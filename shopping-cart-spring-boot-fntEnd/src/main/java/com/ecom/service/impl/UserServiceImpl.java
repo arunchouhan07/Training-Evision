@@ -33,29 +33,16 @@ public class UserServiceImpl implements UserService {
     private CommonUtil commonUtil;
 
     @Override
-    public UserDtls saveUser(UserDtls user, MultipartFile file) throws IOException {
-        String imageName = (!file.isEmpty() && file != null) ? file.getOriginalFilename() : "default.jpg";
-        user.setProfileImage(imageName);
+    public UserDtls saveUser(UserDtls user, String imageUrl) throws IOException {
+        user.setProfileImage(imageUrl);
         user.setRole("ROLE_USER");
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setIsEnable(true);
         user.setLockTime(null);
         user.setFailedAttempt(0);
         user.setAccountNonLocked(true);
-        UserDtls savedUser = userRepository.save(user);
+        return userRepository.save(user);
 
-        if(!ObjectUtils.isEmpty(savedUser))
-        {
-            if(file != null && !file.isEmpty()){
-                File saveFile = new ClassPathResource("static/img").getFile();
-
-                Path path = Paths.get(saveFile.getAbsolutePath() + File.separator + "profile_img" + File.separator
-                        + imageName);
-
-                Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
-            }
-        }
-        return savedUser;
     }
 
     @Override
@@ -98,9 +85,9 @@ public class UserServiceImpl implements UserService {
     public boolean unlockAccountTimeExpire(UserDtls userDtls) {
         long lockTime = userDtls.getLockTime().getTime();
         long unlockTime = lockTime+ AppConstant.UNLOCK_DURATION_TIME;
-        long currentTimeMilisecond = System.currentTimeMillis();
+        long currentTimeMillisecond = System.currentTimeMillis();
 
-        if(unlockTime<currentTimeMilisecond){
+        if(unlockTime<currentTimeMillisecond){
             userDtls.setAccountNonLocked(true);
             userDtls.setFailedAttempt(0);
             userDtls.setLockTime(null);
@@ -113,25 +100,19 @@ public class UserServiceImpl implements UserService {
     @Override
     public Boolean sendForgotPasswordToMail(String email, HttpServletRequest request) {
         UserDtls userByEmail = userRepository.findByEmail(email);
-        log.info("User Find By Mail :"+userByEmail);
         if(ObjectUtils.isEmpty(userByEmail)){
-            log.info("User Can't Find with Given Email "+email);
             return false;
         }else{
             String resetToken = UUID.randomUUID().toString();
             userByEmail.setResetToken(resetToken);
             userRepository.save(userByEmail);
 
-            String url = CommonUtil.genrateUrl(request)+"/reset-password?token="+resetToken;
-            log.info("User Mail is: "+userByEmail.getEmail());
-            log.info("Reset Password Url is: "+url);
+            String url = CommonUtil.generateUrl(request)+"/reset-password?token="+resetToken;
 
             Boolean sendMail = commonUtil.sendMail(userByEmail.getEmail(),url);
             if(sendMail ){
-                log.info("Send Mail Success");
                 return true;
             }else{
-                log.info("Internal Server error");
                 return false;
             }
         }

@@ -124,5 +124,11 @@
         </div>
     </div>
 </div>
+<script>
+    if(window.performance && window.performance.navigation.type === window.performance.navigation.TYPE_BACK_FORWARD){
+        window.history.back();
+        window.location.href = "/admin/products";
+    }
+</script>
 </body>
 </html>

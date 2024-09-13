@@ -3,12 +3,8 @@ package com.ecom.controller;
 import com.ecom.entity.Category;
 import com.ecom.entity.Product;
 import com.ecom.entity.UserDtls;
-import com.ecom.service.CartService;
-import com.ecom.service.CategoryService;
-import com.ecom.service.ProductService;
-import com.ecom.service.UserService;
+import com.ecom.service.*;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +38,9 @@ public class HomeController {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private ImageService imageService;
 
     @GetMapping("/")
     public String index() {
@@ -145,10 +144,10 @@ public class HomeController {
     }
 
     @PostMapping("/saveUser")
-    public String saveUser(@ModelAttribute UserDtls user, @RequestParam("file") MultipartFile file, HttpSession session)
-            throws IOException {
+    public String saveUser(@ModelAttribute UserDtls user, @RequestParam("file") MultipartFile file) throws IOException {
+        String uploadUrl = imageService.upload(file);
 
-        UserDtls saveUser = userService.saveUser(user,file);
+        UserDtls saveUser = userService.saveUser(user,uploadUrl);
 
         if (!ObjectUtils.isEmpty(saveUser)) {
             return "successRegister";

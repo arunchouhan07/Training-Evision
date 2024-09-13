@@ -5,4 +5,6 @@ public class AppConstant {
 
     public static final int ATTEMPT = 3;
 
+    public static String BUCKET_NAME = "ecommerce-arunchouhan.appspot.com";
+
 }

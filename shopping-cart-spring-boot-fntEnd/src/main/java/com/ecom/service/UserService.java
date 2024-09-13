@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface UserService {
 
-    UserDtls saveUser(UserDtls user, MultipartFile file) throws IOException;
+    UserDtls saveUser(UserDtls user, String imageUrl) throws IOException;
 
     UserDtls getUserByEmail(String email);
 

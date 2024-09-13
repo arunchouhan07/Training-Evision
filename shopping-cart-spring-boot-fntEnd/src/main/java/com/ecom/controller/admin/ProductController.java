@@ -4,23 +4,19 @@ import com.ecom.entity.Category;
 import com.ecom.entity.Product;
 import com.ecom.entity.UserDtls;
 import com.ecom.service.CategoryService;
+import com.ecom.service.ImageService;
 import com.ecom.service.ProductService;
 import com.ecom.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.security.Principal;
 import java.util.List;
 
@@ -36,6 +32,9 @@ public class ProductController {
 
     @Autowired
     private CategoryService categoryService;
+
+    @Autowired
+    private ImageService imageService;
 
     @GetMapping("/products")
     public String product(Model m, HttpSession session) {
@@ -56,25 +55,17 @@ public class ProductController {
 
     @PostMapping("/saveProduct")
     public String saveProduct(@ModelAttribute Product product, HttpSession session, @RequestParam("file")MultipartFile multipartFile) throws IOException {
-        String imageName=(!multipartFile.isEmpty())? multipartFile.getOriginalFilename() : "default.jpg";
-        product.setImage(imageName);
+        String uploadImageUrl = imageService.upload(multipartFile);
+        product.setImage(uploadImageUrl);
         product.setDiscount(0);
         product.setDiscountPrice(product.getPrice());
         Product saveProduct = productService.saveProduct(product);
 
         if (!ObjectUtils.isEmpty(saveProduct)) {
-
-            File saveFile = new ClassPathResource("static/img").getFile();
-
-            Path path = Paths.get(saveFile.getAbsolutePath() + File.separator + "product_img" + File.separator
-                    + multipartFile.getOriginalFilename());
-
-            // System.out.println(path);
-            Files.copy(multipartFile.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
-
             session.setAttribute("succMsg", "Product Saved Success");
         } else {
             session.setAttribute("errorMsg", "something wrong on server");
+            return "admin/errorProduct";
         }
 
         return "/admin/success";
@@ -84,25 +75,29 @@ public class ProductController {
     public String editProduct(@PathVariable int id, Model m) {
         Product product = productService.getProductById(id);
         m.addAttribute("product", product);
-        return "admin/edit_Product";
+        return "admin/edit_product";
     }
 
     @PostMapping("/updateProduct")
-    public String updateProduct(@ModelAttribute Product product,@RequestParam("file")MultipartFile multipartFile, HttpSession session) {
+    public String updateProduct(@ModelAttribute Product product, @RequestParam("file")MultipartFile multipartFile, RedirectAttributes redirectAttributes) {
         if (product.getDiscount() < 0 || product.getDiscount() > 100) {
-            session.setAttribute("errorMsg", "invalid Discount");
+            return "admin/errorProduct";
         }else{
             Product updateProduct = productService.updateProduct(product, multipartFile);
             if (!ObjectUtils.isEmpty(updateProduct)) {
-                session.setAttribute("succMsg", "Product update success");
+                redirectAttributes.addFlashAttribute("succMsg", "Product Updated Successfully");
             } else {
-                session.setAttribute("errorMsg", "Something wrong on server");
-                return "redirect:/admin/errorr";
+                return "admin/errorProduct";
             }
         }
-        return "admin/success";
-       // return "redirect:/admin/editProduct/" + product.getId();
+        return "redirect:/admin/formSuccess";
     }
+
+    @GetMapping("/formSuccess")
+    public String showSuccessPage() {
+        return "admin/success";
+    }
+
 
     @GetMapping("/deleteProduct/{id}")
     public String deleteProduct(@PathVariable int id, HttpSession session) {

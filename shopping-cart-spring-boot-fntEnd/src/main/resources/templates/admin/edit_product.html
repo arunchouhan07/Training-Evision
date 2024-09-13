@@ -79,7 +79,6 @@
 											class="form-check-label" for="flexRadioDefault2">
 											Inactive </label>
 									</div>
-
 								</div>
 
 								<div class="row">
@@ -100,7 +99,7 @@
 									</div>
 
 								</div>
-								<button class="btn btn-primary col-md-12">Update</button>
+								<button onclick="goBack()" class="btn btn-primary col-md-12">Update</button>
 							</form>
 						</div>
 					</div>
@@ -108,5 +107,12 @@
 			</div>
 		</div>
 	</section>
+<script>
+	if(window.performance && window.performance.navigation.type === window.performance.navigation.TYPE_BACK_FORWARD){
+		window.history.back();
+		window.location.href = "/admin/products";
+	}
+
+</script>
 </body>
 </html>

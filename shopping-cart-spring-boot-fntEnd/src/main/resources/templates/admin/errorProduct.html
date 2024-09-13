@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Account Creation</title>
+    <title>Product Error</title>
     <script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script>
     <style>
         body {
@@ -19,26 +19,21 @@
         .message {
             margin-top: 20px; /* Space between GIF and text */
             font-size: 20px;
-            color: #131359;
+            color: #333;
             font-weight: 600;
         }
     </style>
 </head>
 <body>
 <dotlottie-player
-        src="https://lottie.host/caee18f1-7032-40d5-a141-58de675b4054/XKuNhgTHoe.json"
+        src="https://lottie.host/edf44703-637a-4cf7-afe2-ad8f65eee7a0/cL0KtiGoo4.json"
         background="transparent"
         speed="1"
         style="width: 300px; height: 300px;"
         loop autoplay>
 </dotlottie-player>
 <div class="message">
-    Account Successfully Created <a href="http://localhost:8080/login">Login</a>
+    Your Product not Update! <a href="http://localhost:8080/admin/products">Please try again</a>
 </div>
-<script>
-    setTimeout(function() {
-        window.location='/login'
-    }, 5000);
-</script>
 </body>
 </html>

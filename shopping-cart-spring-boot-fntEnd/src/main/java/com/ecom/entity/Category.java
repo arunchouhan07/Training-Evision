@@ -17,6 +17,6 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String name;
-    private String imageName;
+    private String imageUrl;
     private Boolean isActive;
 }

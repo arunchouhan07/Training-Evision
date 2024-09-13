@@ -34,12 +34,7 @@ public class AdminUserController {
     @GetMapping("/updateSts")
     public String updateSts(@RequestParam Boolean status, @RequestParam Integer id, HttpSession session) {
         Boolean b = userService.updateUserAcountStatus(id, status);
-        if (b) {
-        //    session.setAttribute("succMsg", "user status updated");
-        }
-        else {
-          //  session.setAttribute("errorMsg", "user status not updated");
-        }
+
         return "redirect:/admin/users";
     }
 
