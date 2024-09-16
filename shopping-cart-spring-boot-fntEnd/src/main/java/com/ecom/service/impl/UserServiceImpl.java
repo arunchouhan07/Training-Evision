@@ -35,7 +35,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDtls saveUser(UserDtls user, String imageUrl) throws IOException {
         user.setProfileImage(imageUrl);
-        user.setRole("ROLE_ADMIN");
+        user.setRole("ROLE_USER");
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setIsEnable(true);
         user.setLockTime(null);

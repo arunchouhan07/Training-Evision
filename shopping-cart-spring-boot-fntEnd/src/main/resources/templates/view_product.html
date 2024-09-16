@@ -2,8 +2,22 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
 	th:replace="~{base::layout(~{::section})}">
 <head>
-<meta charset="ISO-8859-1">
-<title>Insert title here</title>
+	<meta charset="ISO-8859-1">
+	<title>Insert title here</title>
+	<style>
+		.col-md-6.text-center img {
+			width: auto; /* Adjust as needed */
+			height: auto; /* Adjust as needed */
+			max-width: 100%; /* Limit the maximum width */
+			max-height: 100%; /* Limit the maximum height */
+			object-fit: cover; /* Image is scaled to cover the entire parent area */
+			padding: 20px;
+			border-radius: 10px;
+			box-sizing: border-box;
+			margin: 0 auto;
+			display: block;
+		}
+	</style>
 </head>
 <body>
 	<section>
@@ -22,10 +36,10 @@
 						<th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
 
 					</th:block>
-					<div class="col-md-6 text-end">
-						<img alt="" src="/img/product_img/laptop.jpg" width="330px"
-							height="400px">
+					<div class="col-md-6 d-flex justify-content-center align-items-center">
+						<img alt="" th:src="@{${product.image}}">
 					</div>
+
 
 					<div class="col-md-6">
 
