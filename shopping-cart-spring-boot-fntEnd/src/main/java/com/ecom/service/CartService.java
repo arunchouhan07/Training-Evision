@@ -15,4 +15,6 @@ public interface CartService {
     Integer getCartCountForUser(Integer userId);
 
     Cart updateCartQuantityForUser(String sy, Integer cid);
+
+    void deleteCartForUser(Integer userId);
 }

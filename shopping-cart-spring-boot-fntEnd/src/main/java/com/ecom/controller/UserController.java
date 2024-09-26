@@ -70,11 +70,16 @@ public class UserController {
         Double overAllPrice = cartService.getOverAllPrice();
         model.addAttribute("overAllPrice", overAllPrice);
         model.addAttribute("user", loggedInUserDetails);
+        if(cartService.getCartCountForUser(loggedInUserDetails.getId()) == 0){
+            return "redirect:/user/myOrders";
+        }
         return "user/order";
     }
 
     @GetMapping("/myOrders")
     public String myOrders(Model model, Principal principal) {
+        UserDtls loggedInUserDetails = getLoggedInUserDetails(principal);
+        List<ProductOrder> orderConfirmed = productOrderService.getALlProductOrder(loggedInUserDetails.getId(), "Order Confirmed");
         return "user/myOrders";
     }
 
@@ -84,7 +89,12 @@ public class UserController {
         List<ProductOrder> savedProductOrder = productOrderService.save(loggedInUserDetails.getId(), orderRequest);
         model.addAttribute("savedProductOrder", savedProductOrder.get(0));
         model.addAttribute("orderRequest", orderRequest);
-        return (!ObjectUtils.isEmpty(savedProductOrder))? "user/orderSuccess" : "user/orderError";
+        if(!ObjectUtils.isEmpty(savedProductOrder)){
+            cartService.deleteCartForUser(loggedInUserDetails.getId());
+            return "user/orderSuccess";
+        }else{
+            return "user/orderError";
+        }
     }
 
     @ModelAttribute

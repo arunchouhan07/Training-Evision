@@ -1,10 +1,7 @@
 package com.ecom.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-
 public enum OrderStatus {
-    ORDER_CONFIRMED(1, "Order Confirmend"),
+    ORDER_CONFIRMED(1, "Order Confirmed"),
     ORDER_IN_PROGRESS(2, "Order InProgress"),
     ORDER_SHIPPED(3, "Order Shipped"),
     ORDER_CANCELED(4, "Order Canceled"),

@@ -28,4 +28,6 @@ public class Cart {
 
     private Double allOverPrice;
 
+    private Boolean isActive;
+
 }

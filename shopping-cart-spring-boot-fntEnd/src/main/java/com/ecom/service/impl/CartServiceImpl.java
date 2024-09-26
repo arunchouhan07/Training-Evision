@@ -41,6 +41,7 @@ public class CartServiceImpl implements CartService {
              cart.setProduct(product);
              cart.setQuantity(1);
              cart.setTotalPrice(product.getDiscountPrice());
+             cart.setIsActive(true);
         }else{
             cart=getCartDetails;
             cart.setQuantity(cart.getQuantity()+1);
@@ -92,5 +93,10 @@ public class CartServiceImpl implements CartService {
         }
 
         return cart;
+    }
+
+    @Override
+    public void deleteCartForUser(Integer userId) {
+        cartRepository.deleteCartItemsForUser(userId);
     }
 }

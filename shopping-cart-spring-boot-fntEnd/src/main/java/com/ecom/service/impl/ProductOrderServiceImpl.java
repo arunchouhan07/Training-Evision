@@ -72,6 +72,11 @@ public class ProductOrderServiceImpl implements ProductOrderService {
     }
 
     @Override
+    public List<ProductOrder> getALlProductOrder(Integer id, String orderStatus) {
+        return productOrderRepository.getAllProductOrderSuccess(id, orderStatus);
+    }
+
+    @Override
     public ProductOrder updateProductOrder(ProductOrder productOrder) {
         return null;
     }

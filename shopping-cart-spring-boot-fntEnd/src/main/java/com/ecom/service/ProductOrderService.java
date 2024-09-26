@@ -11,6 +11,8 @@ public interface ProductOrderService {
 
     ProductOrder getProductOrder(Integer productId);
 
+    List<ProductOrder> getALlProductOrder(Integer id, String orderStatus);
+
     ProductOrder updateProductOrder(ProductOrder productOrder);
 
     void deleteProductOrder(String productId);
